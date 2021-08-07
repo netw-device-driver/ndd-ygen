@@ -26,18 +26,18 @@ type Container struct {
 type Entry struct {
 	Next          *Container
 	Prev          *Container
-	Name          string
-	Type          string
-	Enum          []string
-	EnumString    string
-	Range         []int
-	Length        []int
-	Pattern       []string
-	PatternString string
-	Union         bool
-	Mandatory     bool
-	Default       string
-	Key           string
+	Name          string      `json:"name,omitempty"`
+	Type          string      `json:"type,omitempty"`
+	Enum          []string    `json:"enum,omitempty"`
+	EnumString    string      `json:"enumString,omitempty"`
+	Range         []int       `json:"range,omitempty"`
+	Length        []int       `json:"length,omitempty"`
+	Pattern       []string    `json:"pattern,omitempty"`
+	PatternString string      `json:"patternString,omitempty"`
+	Union         bool        `json:"union,omitempty"`
+	Mandatory     bool        `json:"mandatory,omitempty"`
+	Default       string      `json:"default,omitempty"`
+	Key           string      `json:"key,omitempty"`
 }
 
 type ContainerOption func(c *Container)
