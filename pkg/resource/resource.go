@@ -226,7 +226,7 @@ func findHierarchicalElements(r *Resource, he []*HeInfo) []*HeInfo {
 }
 
 type HeInfo struct {
-	Name string
-	Key  string
-	Type string
+	Name string `json:"name,omitempty"`
+	Key  string `json:"key,omitempty"`
+	Type string `json:"type,omitempty"`
 }
