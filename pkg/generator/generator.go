@@ -29,9 +29,9 @@ import (
 	"github.com/openconfig/goyang/pkg/yang"
 	"github.com/pkg/errors"
 
-	"github.com/netw-device-driver/ndd-ygen/internal/parser"
-	"github.com/netw-device-driver/ndd-ygen/internal/resource"
-	"github.com/netw-device-driver/ndd-ygen/internal/templ"
+	"github.com/netw-device-driver/ndd-ygen/pkg/parser"
+	"github.com/netw-device-driver/ndd-ygen/pkg/resource"
+	"github.com/netw-device-driver/ndd-ygen/pkg/templ"
 	"github.com/netw-device-driver/ndd-runtime/pkg/logging"
 	"gopkg.in/yaml.v2"
 )

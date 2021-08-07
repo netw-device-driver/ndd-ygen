@@ -20,7 +20,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/netw-device-driver/ndd-ygen/internal/container"
+	"github.com/netw-device-driver/ndd-ygen/pkg/container"
 	config "github.com/netw-device-driver/ndd-grpc/config/configpb"
 	"github.com/openconfig/goyang/pkg/yang"
 	"github.com/stoewer/go-strcase"

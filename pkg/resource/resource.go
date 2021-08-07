@@ -20,9 +20,9 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/netw-device-driver/ndd-ygen/internal/container"
-	"github.com/netw-device-driver/ndd-ygen/internal/leafref"
-	"github.com/netw-device-driver/ndd-ygen/internal/parser"
+	"github.com/netw-device-driver/ndd-ygen/pkg/container"
+	"github.com/netw-device-driver/ndd-ygen/pkg/leafref"
+	"github.com/netw-device-driver/ndd-ygen/pkg/parser"
 	config "github.com/netw-device-driver/ndd-grpc/config/configpb"
 	"github.com/stoewer/go-strcase"
 )

@@ -22,9 +22,9 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/netw-device-driver/ndd-ygen/internal/container"
-	"github.com/netw-device-driver/ndd-ygen/internal/parser"
-	"github.com/netw-device-driver/ndd-ygen/internal/resource"
+	"github.com/netw-device-driver/ndd-ygen/pkg/container"
+	"github.com/netw-device-driver/ndd-ygen/pkg/parser"
+	"github.com/netw-device-driver/ndd-ygen/pkg/resource"
 	config "github.com/netw-device-driver/ndd-grpc/config/configpb"
 	"github.com/openconfig/goyang/pkg/yang"
 )

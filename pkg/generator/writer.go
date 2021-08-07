@@ -17,9 +17,9 @@ limitations under the License.
 package generator
 
 import (
-	"github.com/netw-device-driver/ndd-ygen/internal/container"
-	"github.com/netw-device-driver/ndd-ygen/internal/leafref"
-	"github.com/netw-device-driver/ndd-ygen/internal/resource"
+	"github.com/netw-device-driver/ndd-ygen/pkg/container"
+	"github.com/netw-device-driver/ndd-ygen/pkg/leafref"
+	"github.com/netw-device-driver/ndd-ygen/pkg/resource"
 	"github.com/stoewer/go-strcase"
 )
 
