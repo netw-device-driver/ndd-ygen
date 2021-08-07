@@ -22,7 +22,10 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var debug bool
+var (
+	debug bool
+	localRender bool
+)
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
@@ -43,4 +46,5 @@ func Execute() {
 func init() {
 	rootCmd.SilenceUsage = true
 	rootCmd.PersistentFlags().BoolVarP(&debug, "debug", "d", true, "enable debug mode")
+	rootCmd.PersistentFlags().BoolVarP(&localRender, "localRender", "", false, "flag to determine if we have to render the output locally")
 }

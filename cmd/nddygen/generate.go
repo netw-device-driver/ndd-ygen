@@ -17,7 +17,7 @@ limitations under the License.
 package nddygen
 
 import (
-	"github.com/netw-device-driver/ndd-ygen/internal/generator"
+	"github.com/netw-device-driver/ndd-ygen/pkg/generator"
 	"github.com/netw-device-driver/ndd-runtime/pkg/logging"
 	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
@@ -89,4 +89,5 @@ func init() {
 	generateCmd.Flags().StringVarP(&version, "version", "v", "v1", "The version of the api to geenrate")
 	generateCmd.Flags().StringVarP(&apiGroup, "apiGroup", "g", "srl.ndd.henderiw.be", "The group of the api to geenrate")
 	generateCmd.Flags().StringVarP(&prefix, "prefix", "a", "srl", "The prefix that is added to the kubernetes api resource")
+	
 }

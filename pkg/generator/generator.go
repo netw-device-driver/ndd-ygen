@@ -29,10 +29,10 @@ import (
 	"github.com/openconfig/goyang/pkg/yang"
 	"github.com/pkg/errors"
 
+	"github.com/netw-device-driver/ndd-runtime/pkg/logging"
 	"github.com/netw-device-driver/ndd-ygen/pkg/parser"
 	"github.com/netw-device-driver/ndd-ygen/pkg/resource"
 	"github.com/netw-device-driver/ndd-ygen/pkg/templ"
-	"github.com/netw-device-driver/ndd-runtime/pkg/logging"
 	"gopkg.in/yaml.v2"
 )
 
@@ -48,11 +48,12 @@ const (
 type Generator struct {
 	Config *GeneratorConfig // holds the configuration for the generator
 	//ResourceConfig  map[string]*ResourceDetails // holds the configuration of the resources we should generate
-	Resources []*resource.Resource // holds the resources that are being generated
-	Entries   []*yang.Entry        // Yang entries parsed from the yang files
-	Template  *template.Template
-	log       logging.Logger
-	Debug     bool
+	Resources   []*resource.Resource // holds the resources that are being generated
+	Entries     []*yang.Entry        // Yang entries parsed from the yang files
+	Template    *template.Template
+	log         logging.Logger
+	LocalRender bool
+	Debug       bool
 }
 
 type GeneratorConfig struct {
@@ -151,6 +152,12 @@ func WithPrefix(s string) Option {
 	}
 }
 
+func WithLocalRender(s string) Option {
+	return func(g *Generator) {
+		g.Config.Prefix = s
+	}
+}
+
 // NewYangGoCodeGenerator function defines a new generator
 func NewGenerator(opts ...Option) (*Generator, error) {
 	g := &Generator{
@@ -164,10 +171,12 @@ func NewGenerator(opts ...Option) (*Generator, error) {
 	}
 
 	// process templates to render the resources
-	var err error
-	g.Template, err = templ.ParseTemplates("./templates/")
-	if err != nil {
-		return nil, errors.New(errParseTemplate)
+	if g.LocalRender {
+		var err error
+		g.Template, err = templ.ParseTemplates("./templates/")
+		if err != nil {
+			return nil, errors.New(errParseTemplate)
+		}
 	}
 
 	// Process resource
@@ -257,7 +266,7 @@ func (g *Generator) InitializeResourcesNew(pd map[string]PathDetails, pp string,
 		// the dependency and if not initialized the parent resource will not be found.
 		g.Resources = append(g.Resources, resource.NewResource(opts...))
 		if pathdetails.Hierarchy != nil {
-			// run the procedure in a hierarchical way, offset is 0 since the resource does not have 
+			// run the procedure in a hierarchical way, offset is 0 since the resource does not have
 			// a duplicate element in the path
 			if err := g.InitializeResourcesNew(pathdetails.Hierarchy, path, 0); err != nil {
 				return err
