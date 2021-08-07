@@ -17,15 +17,15 @@ limitations under the License.
 package container
 
 type Container struct {
-	Name    string
-	Entries []*Entry
-	Prev    *Container
+	Name    string            `json:"name,omitempty"`
+	Entries []*Entry          `json:"entries,omitempty"`
+	Prev    *Container        `json:"prev,omitempty"`
 }
 
 // Entry structure keeps track of the elements in a struct/list
 type Entry struct {
-	Next          *Container
-	Prev          *Container
+	Next          *Container  `json:"prev,omitempty"`
+	Prev          *Container  `json:"next,omitempty"`
 	Name          string      `json:"name,omitempty"`
 	Type          string      `json:"type,omitempty"`
 	Enum          []string    `json:"enum,omitempty"`
