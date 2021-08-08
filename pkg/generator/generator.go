@@ -152,9 +152,9 @@ func WithPrefix(s string) Option {
 	}
 }
 
-func WithLocalRender(s string) Option {
+func WithLocalRender(b bool) Option {
 	return func(g *Generator) {
-		g.Config.Prefix = s
+		g.LocalRender = b
 	}
 }
 

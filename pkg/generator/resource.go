@@ -86,11 +86,6 @@ func (g *Generator) ResourceGenerator(resPath string, path config.Path, e *yang.
 			}
 			fmt.Printf("xpath: %s, resPath: %s, level: %d\n", *r.GetAbsoluteXPathWithoutKey(), resPath, r.ContainerLevel)
 
-			if e.Name == "bgp-instance" {
-				fmt.Printf("cPtr: %v\n", cPtr.GetFullName())
-				//os.Exit(1)
-			}
-
 			// Leaf processing
 			if e.Kind.String() == "Leaf" {
 				fmt.Printf("Leaf Name: %s, ResPath: %s \n", e.Name, resPath)

@@ -17,13 +17,15 @@ limitations under the License.
 package resource
 
 import (
+	"fmt"
 	"os"
 	"path/filepath"
+	"strings"
 
+	config "github.com/netw-device-driver/ndd-grpc/config/configpb"
 	"github.com/netw-device-driver/ndd-ygen/pkg/container"
 	"github.com/netw-device-driver/ndd-ygen/pkg/leafref"
 	"github.com/netw-device-driver/ndd-ygen/pkg/parser"
-	config "github.com/netw-device-driver/ndd-grpc/config/configpb"
 	"github.com/stoewer/go-strcase"
 )
 
@@ -145,9 +147,15 @@ func (r *Resource) GetRelativeXPath() *string {
 
 func (r *Resource) GetAbsoluteName() string {
 	e := findPathElemHierarchy(r)
+	// trim the first element since nokia yang comes with a aprefix
 	if len(e) > 1 {
 		e = e[1:]
 	}
+	// we remove the "-" from the element names otherwise we get a name clash when we parse all the Yang information
+	for _, entry := range e {
+		entry.Name = strings.ReplaceAll(entry.Name, "-", "")
+	}
+	fmt.Printf("PathELem: %v\n", e)
 	return parser.GnmiPathToName(&config.Path{
 		Elem: e,
 	})
@@ -215,7 +223,7 @@ func (r *Resource) GetHierarchicalElements() []*HeInfo {
 func findHierarchicalElements(r *Resource, he []*HeInfo) []*HeInfo {
 	h := &HeInfo{
 		Name: r.RootContainerEntry.Name,
-		Key: r.RootContainerEntry.Key,
+		Key:  r.RootContainerEntry.Key,
 		Type: r.RootContainerEntry.Type,
 	}
 	he = append(he, h)

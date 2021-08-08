@@ -59,6 +59,7 @@ var generateCmd = &cobra.Command{
 			generator.WithPrefix(prefix),
 			generator.WithLogging(log),
 			generator.WithDebug(debug),
+			generator.WithLocalRender(true),
 		}
 		g, err := generator.NewGenerator(opts...)
 		if err != nil {

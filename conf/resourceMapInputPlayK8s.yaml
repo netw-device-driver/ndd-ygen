@@ -21,14 +21,14 @@ path:
     /srl_nokia-network-instance/network-instance:
         excludes: [protocols]
         hierarchy:
-            /static-routes:
-            /aggregate-routes:
-            /next-hop-groups:
+            # /static-routes:
+            # /aggregate-routes:
+            # /next-hop-groups:
             /protocols/bgp-evpn:
             /protocols/bgp-vpn:
             /protocols/bgp:
-            /protocols/isis:
-            /protocols/ospf:
-            /protocols/linux:
+            # /protocols/isis:
+            # /protocols/ospf:
+            # /protocols/linux:
     /srl_nokia-bfd/bfd:
 
