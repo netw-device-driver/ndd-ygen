@@ -17,7 +17,6 @@ limitations under the License.
 package resource
 
 import (
-	"fmt"
 	"os"
 	"path/filepath"
 	"strings"
@@ -152,12 +151,17 @@ func (r *Resource) GetAbsoluteName() string {
 		e = e[1:]
 	}
 	// we remove the "-" from the element names otherwise we get a name clash when we parse all the Yang information
+	newElem := make([]*config.PathElem, 0)
 	for _, entry := range e {
-		entry.Name = strings.ReplaceAll(entry.Name, "-", "")
+		pathElem := &config.PathElem{
+			Name: strings.ReplaceAll(entry.Name, "-", ""),
+			Key:  entry.GetKey(),
+		}
+		newElem = append(newElem, pathElem)
 	}
-	fmt.Printf("PathELem: %v\n", e)
+	//fmt.Printf("PathELem: %v\n", newElem)
 	return parser.GnmiPathToName(&config.Path{
-		Elem: e,
+		Elem: newElem,
 	})
 }
 
