@@ -103,6 +103,14 @@ func (r *Resource) AddExternalLeafRef(ll, rl *config.Path) {
 	})
 }
 
+func (r *Resource) GetLocalLeafRef() []*leafref.LeafRef {
+	return r.LocalLeafRefs
+}
+
+func (r *Resource) GetExternalLeafRef() []*leafref.LeafRef {
+	return r.ExternalLeafRefs
+}
+
 func (r *Resource) GetResourceNameWithPrefix(prefix string) string {
 	return strcase.UpperCamelCase(prefix + "-" + r.GetAbsoluteName())
 }
