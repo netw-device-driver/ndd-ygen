@@ -30,8 +30,8 @@ import (
 	"github.com/pkg/errors"
 
 	"github.com/netw-device-driver/ndd-runtime/pkg/logging"
-	"github.com/netw-device-driver/ndd-ygen/pkg/parser"
-	"github.com/netw-device-driver/ndd-ygen/pkg/resource"
+	"github.com/netw-device-driver/ndd-runtime/pkg/yang/parser"
+	"github.com/netw-device-driver/ndd-runtime/pkg/yang/resource"
 	"github.com/netw-device-driver/ndd-ygen/pkg/templ"
 	"gopkg.in/yaml.v2"
 )

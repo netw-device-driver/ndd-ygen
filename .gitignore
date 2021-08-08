@@ -27,3 +27,4 @@ PRIVATE.md
 data/*
 out/*
 *.tst
+*.go2

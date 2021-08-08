@@ -9,7 +9,7 @@ require (
 	github.com/huandu/xstrings v1.3.2 // indirect
 	github.com/mitchellh/copystructure v1.2.0 // indirect
 	github.com/netw-device-driver/ndd-grpc v0.1.16
-	github.com/netw-device-driver/ndd-runtime v0.3.78
+	github.com/netw-device-driver/ndd-runtime v0.3.79
 	github.com/openconfig/goyang v0.2.7
 	github.com/pkg/errors v0.9.1
 	github.com/spf13/cobra v1.2.1
