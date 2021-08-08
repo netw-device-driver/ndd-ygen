@@ -17,11 +17,10 @@ limitations under the License.
 package parser
 
 import (
-	"fmt"
 	"strings"
 
-	"github.com/netw-device-driver/ndd-ygen/pkg/container"
 	config "github.com/netw-device-driver/ndd-grpc/config/configpb"
+	"github.com/netw-device-driver/ndd-ygen/pkg/container"
 	"github.com/openconfig/goyang/pkg/yang"
 	"github.com/stoewer/go-strcase"
 )
@@ -150,14 +149,13 @@ func CreateContainerEntry(e *yang.Entry, next, prev *container.Container) *conta
 		for _, le := range e.Type.Length {
 			entry.Length = append(entry.Length, int(le.Min.Value))
 			entry.Length = append(entry.Length, int(le.Max.Value))
-			fmt.Printf("LENGTH MIN: %d MAX: %d, TOTAL: %d\n", le.Min.Value, le.Max.Value, entry.Length)
+			//fmt.Printf("LENGTH MIN: %d MAX: %d, TOTAL: %d\n", le.Min.Value, le.Max.Value, entry.Length)
 		}
 
 		if e.Type.Pattern != nil {
-			for _, pa := range e.Type.Pattern {
-				entry.Pattern = append(entry.Pattern, pa)
-				fmt.Printf("LEAF NAME: %s, PATTERN: %s\n", e.Name, entry.Pattern)
-			}
+			entry.Pattern = append(entry.Pattern, e.Type.Pattern...)
+			//fmt.Printf("LEAF NAME: %s, PATTERN: %s\n", e.Name, entry.Pattern)
+
 		}
 		if e.Type.Kind.String() == "enumeration" {
 			entry.Enum = e.Type.Enum.Names()
@@ -202,7 +200,7 @@ func ProcessLeafRef(e *yang.Entry, resfullPath string, activeResPath *config.Pat
 	default:
 		switch GetTypeKind(e) {
 		case "leafref":
-			fmt.Println(e.Node.Statement().String())
+			//fmt.Println(e.Node.Statement().String())
 			splitData := strings.Split(e.Node.Statement().String(), "\n")
 			var path string
 			var elem string
@@ -210,19 +208,19 @@ func ProcessLeafRef(e *yang.Entry, resfullPath string, activeResPath *config.Pat
 			for _, s := range splitData {
 				if strings.Contains(s, "path ") {
 					// strip the junk from the leafref to get a plain xpath
-					fmt.Printf("LeafRef Path: %s\n", s)
+					//fmt.Printf("LeafRef Path: %s\n", s)
 					s = strings.ReplaceAll(s, "path ", "")
 					s = strings.ReplaceAll(s, ";", "")
 					s = strings.ReplaceAll(s, "\"", "")
 					s = strings.ReplaceAll(s, " ", "")
 					s = strings.ReplaceAll(s, "\t", "")
-					fmt.Printf("LeafRef Path: %s\n", s)
+					//fmt.Printf("LeafRef Path: %s\n", s)
 
 					// split the leafref per "/" and split the element and key from the path
 					// last element is the key
 					// 2nd last element is the element
 					split2data := strings.Split(s, "/")
-					fmt.Printf("leafRef Len Split2 %d\n", len(split2data))
+					//fmt.Printf("leafRef Len Split2 %d\n", len(split2data))
 
 					for i, s2 := range split2data {
 						switch i {
@@ -247,22 +245,22 @@ func ProcessLeafRef(e *yang.Entry, resfullPath string, activeResPath *config.Pat
 					// if the path contains /.. this is a relative leafref path
 					relativeIndex := strings.Count(path, "/..")
 					if relativeIndex > 0 {
-						fmt.Printf("leafRef Relative Path: %s, Element: %s, Key: %s, '/..' count %d\n", path, elem, k, relativeIndex)
+						//fmt.Printf("leafRef Relative Path: %s, Element: %s, Key: %s, '/..' count %d\n", path, elem, k, relativeIndex)
 						// check if the final p contains relative indirection to the resourcePath -> "/.."
 						resSplitData := strings.Split(RemoveFirstEntry(resfullPath), "/")
-						fmt.Printf("ResPath Split Length: %d data: %v\n", len(resSplitData), resSplitData)
+						//fmt.Printf("ResPath Split Length: %d data: %v\n", len(resSplitData), resSplitData)
 						var addString string
 						for i := 1; i <= (len(resSplitData) - 1 - strings.Count(path, "/..")); i++ {
 							addString += "/" + resSplitData[i]
 						}
-						fmt.Printf("leafRef Absolute Path Add string: %s\n", addString)
+						//fmt.Printf("leafRef Absolute Path Add string: %s\n", addString)
 						path = addString + strings.ReplaceAll(path, "/..", "")
 					}
-					fmt.Printf("leafRef Absolute Path: %s, Element: %v, Key: %s, '/..' count %d\n", path, e, k, relativeIndex)
+					//fmt.Printf("leafRef Absolute Path: %s, Element: %v, Key: %s, '/..' count %d\n", path, e, k, relativeIndex)
 
 				}
 			}
-			fmt.Printf("Path: %s, Elem: %s, Key: %s\n", path, elem, k)
+			//fmt.Printf("Path: %s, Elem: %s, Key: %s\n", path, elem, k)
 			remotePath := XpathToGnmiPath(path, 0)
 			InsertElemInPath(remotePath, elem, k)
 
@@ -274,17 +272,17 @@ func ProcessLeafRef(e *yang.Entry, resfullPath string, activeResPath *config.Pat
 			if strings.Contains(*GnmiPathToXPath(remotePath, false), *GnmiPathToXPath(activeResPath, false)) {
 				// this is a local leafref within the resource
 				// make the localPath and remotePath relative to the resource
-				fmt.Printf("localPath: %v, remotePath %v, activePath %v\n", localPath, remotePath, activeResPath)
+				//fmt.Printf("localPath: %v, remotePath %v, activePath %v\n", localPath, remotePath, activeResPath)
 				localPath = TransformPathAsRelative2Resource(localPath, activeResPath)
 				remotePath = TransformPathAsRelative2Resource(remotePath, activeResPath)
-				fmt.Printf("localPath: %v, remotePath %v\n", localPath, remotePath)
+				//fmt.Printf("localPath: %v, remotePath %v\n", localPath, remotePath)
 				return localPath, remotePath, true
 			}
 			// leafref is external to the resource
-			fmt.Printf("localPath: %v, remotePath %v, activePath %v\n", localPath, remotePath, activeResPath)
+			//fmt.Printf("localPath: %v, remotePath %v, activePath %v\n", localPath, remotePath, activeResPath)
 			// make the localPath relative to the resource
 			localPath = TransformPathAsRelative2Resource(localPath, activeResPath)
-			fmt.Printf("localPath: %v, remotePath %v\n", localPath, remotePath)
+			//fmt.Printf("localPath: %v, remotePath %v\n", localPath, remotePath)
 
 			return localPath, remotePath, false
 		}

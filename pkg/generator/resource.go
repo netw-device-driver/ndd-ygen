@@ -22,10 +22,10 @@ import (
 	"sort"
 	"strings"
 
+	config "github.com/netw-device-driver/ndd-grpc/config/configpb"
 	"github.com/netw-device-driver/ndd-ygen/pkg/container"
 	"github.com/netw-device-driver/ndd-ygen/pkg/parser"
 	"github.com/netw-device-driver/ndd-ygen/pkg/resource"
-	config "github.com/netw-device-driver/ndd-grpc/config/configpb"
 	"github.com/openconfig/goyang/pkg/yang"
 )
 
@@ -39,7 +39,9 @@ func (g *Generator) FindBestMatch(path config.Path) (*resource.Resource, bool) {
 			// find the string which matches the most
 			// should be the last match normally since we added them
 			// to the list from root to lower hierarchy
+
 			if len([]rune(*r.GetAbsoluteXPath())) > minLength {
+				minLength = len([]rune(*r.GetAbsoluteXPath()))
 				resMatch = r
 				found = true
 			}
@@ -82,7 +84,12 @@ func (g *Generator) ResourceGenerator(resPath string, path config.Path, e *yang.
 
 				cPtr = r.ContainerLevelKeys[newLevel-1][len(r.ContainerLevelKeys[newLevel-1])-1]
 			}
-			fmt.Printf("xpath: %s, respAth: %s, level: %d\n", *r.GetAbsoluteXPathWithoutKey(), resPath, r.ContainerLevel)
+			fmt.Printf("xpath: %s, resPath: %s, level: %d\n", *r.GetAbsoluteXPathWithoutKey(), resPath, r.ContainerLevel)
+
+			if e.Name == "bgp-instance" {
+				fmt.Printf("cPtr: %v\n", cPtr.GetFullName())
+				//os.Exit(1)
+			}
 
 			// Leaf processing
 			if e.Kind.String() == "Leaf" {
@@ -115,6 +122,7 @@ func (g *Generator) ResourceGenerator(resPath string, path config.Path, e *yang.
 					r.ContainerLevelKeys[newLevel] = make([]*container.Container, 0)
 					r.ContainerLevelKeys[newLevel] = append(r.ContainerLevelKeys[newLevel], r.Container)
 					r.ContainerList = append(r.ContainerList, r.Container)
+
 				} else {
 					// create a new container for the next iteration
 					c := container.NewContainer(e.Name, cPtr)
