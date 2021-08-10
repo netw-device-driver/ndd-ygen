@@ -68,16 +68,6 @@ type GeneratorConfig struct {
 	Prefix               string // the prefix that is addded to the k8s resource api
 }
 
-// ResourceDetails struct
-/*
-type ResourceDetails struct {
-	DependsOn        *Res     // full path that this resource depends upon
-	Excludes         []string // full path that is to be excluded for this resource
-	ExcludeElementsU []string // the exclude element includes hierarchical elements and exclude elements
-	Level            int      // the resource level
-}
-*/
-
 // ResourceYamlInput struct
 type ResourceYamlInput struct {
 	Path map[string]PathDetails `yaml:"path"`

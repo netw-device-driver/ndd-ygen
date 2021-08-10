@@ -344,13 +344,10 @@ github.com/munnerz/goautoneg v0.0.0-20191010083416-a7dc8b61c822/go.mod h1:+n7T8m
 github.com/mwitkow/go-conntrack v0.0.0-20161129095857-cc309e4a2223/go.mod h1:qRWi+5nqEBWmkhHvq77mSJWrCKwh8bxhgT7d/eI7P4U=
 github.com/mwitkow/go-conntrack v0.0.0-20190716064945-2f068394615f/go.mod h1:qRWi+5nqEBWmkhHvq77mSJWrCKwh8bxhgT7d/eI7P4U=
 github.com/mxk/go-flowrate v0.0.0-20140419014527-cca7078d478f/go.mod h1:ZdcZmHo+o7JKHSa8/e818NopupXU1YMK5fe1lsApnBw=
-github.com/netw-device-driver/ndd-grpc v0.1.3/go.mod h1:UvIazshg/l2Yo+dSzalmADD3mJqQX0fjgVt5HlW5Nz8=
 github.com/netw-device-driver/ndd-grpc v0.1.16 h1:kY7MKX3eVI5KnA4KewNe8u0ugzge3hf4E683pP3JHfA=
 github.com/netw-device-driver/ndd-grpc v0.1.16/go.mod h1:UvIazshg/l2Yo+dSzalmADD3mJqQX0fjgVt5HlW5Nz8=
-github.com/netw-device-driver/ndd-runtime v0.3.78 h1:2oOxxXWWHQTpkDr8AluDv6Xgj62oN+eMxocMVjUxfrA=
-github.com/netw-device-driver/ndd-runtime v0.3.78/go.mod h1:oqSqGYkC+rU0AugWULsi4VUzXxBcAr4Vr0Xo5Wpuh+E=
-github.com/netw-device-driver/ndd-runtime v0.3.79 h1:nLmpLWM/ehJt+q6voYhqbWHBmSUNYQ8fW8uB35mNmgc=
-github.com/netw-device-driver/ndd-runtime v0.3.79/go.mod h1:dUXD2M4xpHLTFfTIxbFZG1Jch54VNkpJyeKMlW+fEDw=
+github.com/netw-device-driver/ndd-runtime v0.4.2 h1:+VLOXB61ls3TyO6yWaX5SiCxo+ECjMIQsiWrYPO2yTw=
+github.com/netw-device-driver/ndd-runtime v0.4.2/go.mod h1:dUXD2M4xpHLTFfTIxbFZG1Jch54VNkpJyeKMlW+fEDw=
 github.com/niemeyer/pretty v0.0.0-20200227124842-a10e7caefd8e h1:fD57ERR4JtEqsWbfPhv4DMiApHyliiK5xCTNVSPiaAs=
 github.com/niemeyer/pretty v0.0.0-20200227124842-a10e7caefd8e/go.mod h1:zD1mROLANZcx1PVRCS0qkT7pwLkGfwJo4zjcN/Tysno=
 github.com/nxadm/tail v1.4.4/go.mod h1:kenIhsEOeOJmVchQTgglprH7qJGnHDVpk1VPCcaMI8A=
