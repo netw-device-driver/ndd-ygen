@@ -61,13 +61,13 @@ func (g *Generator) DoesResourceMatch(path config.Path) (*resource.Resource, boo
 	return nil, false
 }
 
-func (g *Generator) ResourceGenerator(resPath string, path config.Path, e *yang.Entry) error {
+func (g *Generator) ResourceGenerator(resPath string, dynPath config.Path, e *yang.Entry) error {
 	resPath += filepath.Join("/", e.Name)
 	//fmt.Printf("resource path1: %s \n", resPath)
-	path.Elem = append(path.Elem, parser.InitializePathElem(e))
+	dynPath.Elem = append(dynPath.Elem, parser.InitializePathElem(e))
 	//fmt.Printf("resource path2: %s \n", *parser.GnmiPathToXPath(&path, false))
 
-	if r, ok := g.DoesResourceMatch(path); ok {
+	if r, ok := g.DoesResourceMatch(dynPath); ok {
 		//fmt.Printf("match path: %s \n", *r.GetAbsoluteXPath())
 		switch {
 		case e.RPC != nil:
@@ -108,6 +108,12 @@ func (g *Generator) ResourceGenerator(resPath string, path config.Path, e *yang.
 				// for newLevl = 0 we do not have to rely on the cPtr, since there is no cPtr initialized yet
 				// for newLevl = 0 we dont create an entry in the container but we create a root container entry
 				if newLevel == 0 {
+					// Allocate a new actual path in the resource
+					r.ActualPath = &config.Path{
+						Elem: make([]*config.PathElem, 0),
+					}
+					// append the entry to the actual path of the reosurce
+					r.ActualPath.Elem = append(r.ActualPath.Elem , parser.InitializePathElem(e))
 					// create a new container and apply to the root of the resource
 					r.Container = container.NewContainer(e.Name, nil)
 					// r.Container.Entries = append(r.Container.Entries, parser.CreateContainerEntry(e, nil, nil))
@@ -119,8 +125,13 @@ func (g *Generator) ResourceGenerator(resPath string, path config.Path, e *yang.
 					r.ContainerList = append(r.ContainerList, r.Container)
 
 				} else {
+					// append the entry to the actual path of the reosurce
+					r.ActualPath.Elem = append(r.ActualPath.Elem , parser.InitializePathElem(e))
 					// create a new container for the next iteration
 					c := container.NewContainer(e.Name, cPtr)
+					if newLevel == 1 {
+						r.RootContainerEntry.Next = c
+					}
 					// allocate container entry to the original container Pointer and append to the container entry list
 					// the next pointer of the entry points to the new container
 					cPtr.Entries = append(cPtr.Entries, parser.CreateContainerEntry(e, c, cPtr))
@@ -142,7 +153,7 @@ func (g *Generator) ResourceGenerator(resPath string, path config.Path, e *yang.
 	}
 	sort.Strings(names)
 	for _, k := range names {
-		g.ResourceGenerator(resPath, path, e.Dir[k])
+		g.ResourceGenerator(resPath, dynPath, e.Dir[k])
 	}
 	return nil
 }

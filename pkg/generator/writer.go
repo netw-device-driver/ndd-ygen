@@ -17,6 +17,7 @@ limitations under the License.
 package generator
 
 import (
+	"github.com/netw-device-driver/ndd-grpc/config/configpb"
 	"github.com/netw-device-driver/ndd-runtime/pkg/yang/container"
 	"github.com/netw-device-driver/ndd-runtime/pkg/yang/leafref"
 	"github.com/netw-device-driver/ndd-runtime/pkg/yang/resource"
@@ -82,6 +83,9 @@ func (g *Generator) WriteResourceHeader(r *resource.Resource) error {
 		ApiGroup               string
 		ResourceLastElement    string
 		ResourceNameWithPrefix string
+		ResourceTest1          *configpb.Path
+		ResourceTest2          *configpb.Path
+		ResourceTest3          *configpb.Path
 	}{
 		Version:                g.Config.Version,
 		ApiGroup:               g.Config.ApiGroup,
