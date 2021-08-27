@@ -23,10 +23,9 @@ import (
 	"strings"
 
 	config "github.com/netw-device-driver/ndd-grpc/config/configpb"
-	"github.com/netw-device-driver/ndd-runtime/pkg/yang/container"
-	"github.com/netw-device-driver/ndd-runtime/pkg/yang/parser"
-	"github.com/netw-device-driver/ndd-runtime/pkg/yang/resource"
 	"github.com/openconfig/goyang/pkg/yang"
+	"github.com/yndd/ndd-yang/pkg/container"
+	"github.com/yndd/ndd-yang/pkg/resource"
 )
 
 // FindBestMatch finds the string which matches the most
@@ -35,7 +34,7 @@ func (g *Generator) FindBestMatch(path config.Path) (*resource.Resource, bool) {
 	resMatch := &resource.Resource{}
 	found := false
 	for _, r := range g.Resources {
-		if strings.Contains(*parser.GnmiPathToXPath(&path, false), *r.GetAbsoluteXPath()) {
+		if strings.Contains(*g.parser.ConfigGnmiPathToXPath(&path, false), *r.GetAbsoluteXPath()) {
 			// find the string which matches the most
 			// should be the last match normally since we added them
 			// to the list from root to lower hierarchy
@@ -64,7 +63,7 @@ func (g *Generator) DoesResourceMatch(path config.Path) (*resource.Resource, boo
 func (g *Generator) ResourceGenerator(resPath string, dynPath config.Path, e *yang.Entry) error {
 	resPath += filepath.Join("/", e.Name)
 	//fmt.Printf("resource path1: %s \n", resPath)
-	dynPath.Elem = append(dynPath.Elem, parser.InitializePathElem(e))
+	dynPath.Elem = append(dynPath.Elem, g.parser.CreatePathElem(e))
 	//fmt.Printf("resource path2: %s \n", *parser.GnmiPathToXPath(&path, false))
 
 	if r, ok := g.DoesResourceMatch(dynPath); ok {
@@ -90,8 +89,8 @@ func (g *Generator) ResourceGenerator(resPath string, dynPath config.Path, e *ya
 			if e.Kind.String() == "Leaf" {
 				fmt.Printf("Leaf Name: %s, ResPath: %s \n", e.Name, resPath)
 				// add entry to the container
-				cPtr.Entries = append(cPtr.Entries, parser.CreateContainerEntry(e, nil, nil))
-				localPath, remotePath, local := parser.ProcessLeafRef(e, resPath, r.GetAbsoluteGnmiActualResourcePath())
+				cPtr.Entries = append(cPtr.Entries, g.parser.CreateContainerEntry(e, nil, nil))
+				localPath, remotePath, local := g.parser.ProcessLeafRef(e, resPath, r.GetAbsoluteGnmiActualResourcePath())
 				if localPath != nil {
 					// validate if the leafrefs is a local leafref or an externaal leafref
 					if local {
@@ -113,20 +112,20 @@ func (g *Generator) ResourceGenerator(resPath string, dynPath config.Path, e *ya
 						Elem: make([]*config.PathElem, 0),
 					}
 					// append the entry to the actual path of the reosurce
-					r.ActualPath.Elem = append(r.ActualPath.Elem , parser.InitializePathElem(e))
+					r.ActualPath.Elem = append(r.ActualPath.Elem, g.parser.CreatePathElem(e))
 					// create a new container and apply to the root of the resource
 					r.Container = container.NewContainer(e.Name, nil)
 					// r.Container.Entries = append(r.Container.Entries, parser.CreateContainerEntry(e, nil, nil))
 					// append the container Ptr to the back of the list, to track the used container Pointers per level
 					// newLevel =0
-					r.SetRootContainerEntry(parser.CreateContainerEntry(e, nil, nil))
+					r.SetRootContainerEntry(g.parser.CreateContainerEntry(e, nil, nil))
 					r.ContainerLevelKeys[newLevel] = make([]*container.Container, 0)
 					r.ContainerLevelKeys[newLevel] = append(r.ContainerLevelKeys[newLevel], r.Container)
 					r.ContainerList = append(r.ContainerList, r.Container)
 
 				} else {
 					// append the entry to the actual path of the reosurce
-					r.ActualPath.Elem = append(r.ActualPath.Elem , parser.InitializePathElem(e))
+					r.ActualPath.Elem = append(r.ActualPath.Elem, g.parser.CreatePathElem(e))
 					// create a new container for the next iteration
 					c := container.NewContainer(e.Name, cPtr)
 					if newLevel == 1 {
@@ -134,15 +133,13 @@ func (g *Generator) ResourceGenerator(resPath string, dynPath config.Path, e *ya
 					}
 					// allocate container entry to the original container Pointer and append to the container entry list
 					// the next pointer of the entry points to the new container
-					cPtr.Entries = append(cPtr.Entries, parser.CreateContainerEntry(e, c, cPtr))
+					cPtr.Entries = append(cPtr.Entries, g.parser.CreateContainerEntry(e, c, cPtr))
 					// append the container Ptr to the back of the list, to track the used container Pointers per level
 					// initialize the level
 					r.ContainerLevelKeys[newLevel] = make([]*container.Container, 0)
 					r.ContainerLevelKeys[newLevel] = append(r.ContainerLevelKeys[newLevel], c)
 					r.ContainerList = append(r.ContainerList, c)
-
 				}
-
 			}
 		}
 	}

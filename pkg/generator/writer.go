@@ -18,10 +18,10 @@ package generator
 
 import (
 	"github.com/netw-device-driver/ndd-grpc/config/configpb"
-	"github.com/netw-device-driver/ndd-runtime/pkg/yang/container"
-	"github.com/netw-device-driver/ndd-runtime/pkg/yang/leafref"
-	"github.com/netw-device-driver/ndd-runtime/pkg/yang/resource"
 	"github.com/stoewer/go-strcase"
+	"github.com/yndd/ndd-yang/pkg/container"
+	"github.com/yndd/ndd-yang/pkg/parser"
+	"github.com/yndd/ndd-yang/pkg/resource"
 )
 
 func (g *Generator) Render() error {
@@ -142,7 +142,7 @@ func (g *Generator) WriteResourceLocalLeafRef(r *resource.Resource) error {
 	s := struct {
 		Kind         string
 		ResourceName string
-		LeafRefs     []*leafref.LeafRef
+		LeafRefs     []*parser.LeafRef
 	}{
 		Kind:         "Local",
 		ResourceName: r.GetResourceNameWithPrefix(""),
@@ -159,7 +159,7 @@ func (g *Generator) WriteResourceExternalLeafRef(r *resource.Resource) error {
 	s := struct {
 		Kind         string
 		ResourceName string
-		LeafRefs     []*leafref.LeafRef
+		LeafRefs     []*parser.LeafRef
 	}{
 		Kind:         "External",
 		ResourceName: r.GetResourceNameWithPrefix(""),

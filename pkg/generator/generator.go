@@ -30,8 +30,8 @@ import (
 	"github.com/pkg/errors"
 
 	"github.com/netw-device-driver/ndd-runtime/pkg/logging"
-	"github.com/netw-device-driver/ndd-runtime/pkg/yang/parser"
-	"github.com/netw-device-driver/ndd-runtime/pkg/yang/resource"
+	"github.com/yndd/ndd-yang/pkg/parser"
+	"github.com/yndd/ndd-yang/pkg/resource"
 	"github.com/netw-device-driver/ndd-ygen/pkg/templ"
 	"gopkg.in/yaml.v2"
 )
@@ -46,6 +46,7 @@ const (
 )
 
 type Generator struct {
+	parser *parser.Parser
 	Config *GeneratorConfig // holds the configuration for the generator
 	//ResourceConfig  map[string]*ResourceDetails // holds the configuration of the resources we should generate
 	Resources   []*resource.Resource // holds the resources that are being generated
@@ -151,6 +152,7 @@ func WithLocalRender(b bool) Option {
 // NewYangGoCodeGenerator function defines a new generator
 func NewGenerator(opts ...Option) (*Generator, error) {
 	g := &Generator{
+		parser: parser.NewParser(),
 		Config: new(GeneratorConfig),
 		//ResourceConfig:  make(map[string]*ResourceDetails),
 		Resources: make([]*resource.Resource, 0),
@@ -220,7 +222,7 @@ func (g *Generator) FindResource(p string) (*resource.Resource, error) {
 	//fmt.Printf("find resource\n")
 	for _, r := range g.Resources {
 		//fmt.Printf("find resource path %s %s\n", p, *parser.GnmiPathToXPath(r.Path))
-		if p == *parser.GnmiPathToXPath(r.Path, false) {
+		if p == *g.parser.ConfigGnmiPathToXPath(r.Path, false) {
 			return r, nil
 		}
 	}
