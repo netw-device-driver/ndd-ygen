@@ -24,7 +24,7 @@ testbin/*
 *.swo
 *~
 PRIVATE.md
-data/*
-out/*
+data
+out
 *.tst
 *.go2
